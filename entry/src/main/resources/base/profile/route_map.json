@@ -1,0 +1,12 @@
+{
+  "routerMap": [
+    {
+      "name": "EventPage",
+      "pageSourceFile": "src/main/ets/pages/EventPage.ets",
+      "buildFunction": "EventPageBuilder",
+      "data": {
+        "description" : "this is EventPage"
+      }
+    }
+  ]
+}
