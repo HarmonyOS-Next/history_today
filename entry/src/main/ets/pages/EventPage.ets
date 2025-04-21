@@ -12,7 +12,7 @@ struct EventPage {
 
   @Local dayEvent: DayEvent = new DayEvent()
 
-  @Local angle: number = 45
+  @Local angle: number = 22.5
 
   build() {
     NavDestination() {

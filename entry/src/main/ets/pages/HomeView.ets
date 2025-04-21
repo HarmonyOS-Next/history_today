@@ -13,15 +13,21 @@ export struct HomeView {
 
   async aboutToAppear(): Promise<void> {
     await this.getData()
-    this.pathStack?.pushPathByName('EventPage', this.dayEventList[0])
+    if (this.globalData.isLandscape && this.dayEventList[0]) {
+      this.pathStack?.pushPathByName('EventPage', this.dayEventList[0])
+    }
   }
 
   async getData() {
-    const month = this.selectedDate.getMonth() + 1
-    const date = this.selectedDate.getDate()
-    const url = `http://192.168.2.1:3000/api/events?month=${month}&date=${date}`
-    const res = await axios.get<null, AxiosResponse<DayRes, null>>(url)
-    this.dayEventList = res.data.result
+    try {
+      const month = this.selectedDate.getMonth() + 1
+      const date = this.selectedDate.getDate()
+      const url = `https://api-tanhua-harmony.itheima.net/api/events?month=${month}&date=${date}`
+      const res = await axios.get<null, AxiosResponse<DayRes, null>>(url)
+      this.dayEventList = res.data.data
+    } catch (e) {
+      promptAction.showDialog({ message: e.message })
+    }
   }
 
   async showDatePicker() {

@@ -12,5 +12,5 @@ export class DayEvent {
 }
 
 export class DayRes {
-  result: DayEvent[] = []
+  data: DayEvent[] = []
 }
