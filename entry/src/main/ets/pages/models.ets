@@ -1,7 +1,7 @@
 @ObservedV2
-export class GlobalData {
+export class AppBreakPoint {
   @Trace
-  isLandscape: boolean = false
+  breakPoint: string = 'sm'
 }
 
 export class DayEvent {

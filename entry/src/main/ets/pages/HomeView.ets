@@ -1,19 +1,19 @@
 import { AppStorageV2, promptAction } from '@kit.ArkUI'
 import axios, { AxiosResponse } from '@ohos/axios'
-import { DayEvent, DayRes, GlobalData } from './models'
+import { AppBreakPoint, DayEvent, DayRes } from './models'
 
 
 @ComponentV2
 export struct HomeView {
   pathStack = AppStorageV2.connect(NavPathStack, () => new NavPathStack())!
-  @Local globalData: GlobalData = AppStorageV2.connect(GlobalData, () => new GlobalData())!
+  appBreakPoint: AppBreakPoint = AppStorageV2.connect(AppBreakPoint, () => new AppBreakPoint())!
   @Local selectedDate: Date = new Date()
   @Local dayEventList: DayEvent[] = []
   customDialogId = 0
 
   async aboutToAppear(): Promise<void> {
     await this.getData()
-    if (this.globalData.isLandscape && this.dayEventList[0]) {
+    if (this.appBreakPoint.breakPoint === 'lg' && this.dayEventList[0]) {
       this.pathStack?.pushPathByName('EventPage', this.dayEventList[0])
     }
   }
