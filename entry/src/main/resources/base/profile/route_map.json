@@ -7,6 +7,14 @@
       "data": {
         "description" : "this is EventPage"
       }
+    },
+    {
+      "name": "CollectPage",
+      "pageSourceFile": "src/main/ets/pages/CollectPage.ets",
+      "buildFunction": "CollectPageBuilder",
+      "data": {
+        "description" : "this is CollectPage"
+      }
     }
   ]
 }

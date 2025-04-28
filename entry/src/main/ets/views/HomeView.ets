@@ -1,6 +1,7 @@
 import { AppStorageV2, promptAction } from '@kit.ArkUI'
-import axios, { AxiosResponse } from '@ohos/axios'
-import { AppBreakPoint, DayEvent, DayRes } from './models'
+import { MyListItem } from '../components/MyListItem'
+import { AppBreakPoint, DayEvent } from '../models'
+import { httpClient } from '../utils/HttpClient'
 
 
 @ComponentV2
@@ -8,6 +9,7 @@ export struct HomeView {
   pathStack = AppStorageV2.connect(NavPathStack, () => new NavPathStack())!
   appBreakPoint: AppBreakPoint = AppStorageV2.connect(AppBreakPoint, () => new AppBreakPoint())!
   @Local selectedDate: Date = new Date()
+  @Local keyword: string = ''
   @Local dayEventList: DayEvent[] = []
   customDialogId = 0
 
@@ -22,11 +24,11 @@ export struct HomeView {
     try {
       const month = this.selectedDate.getMonth() + 1
       const date = this.selectedDate.getDate()
-      const url = `https://api-tanhua-harmony.itheima.net/api/events?month=${month}&date=${date}`
-      const res = await axios.get<null, AxiosResponse<DayRes, null>>(url)
-      this.dayEventList = res.data.data
+      const url = `events?month=${month}&date=${date}&title=${encodeURIComponent(this.keyword)}`
+      const data = await httpClient.request<DayEvent[]>({ url })
+      this.dayEventList = data
     } catch (e) {
-      promptAction.showDialog({ message: e.message })
+      promptAction.showDialog({ message: e.message || '获取数据失败' })
     }
   }
 
@@ -54,10 +56,11 @@ export struct HomeView {
           .fontSize(20)
           .onClick(() => promptAction.closeCustomDialog(this.customDialogId))
         Text('确认')
-          .fontColor('#0000FF')
+          .fontColor($r('app.color.main_color'))
           .fontSize(20)
           .onClick(() => {
             promptAction.closeCustomDialog(this.customDialogId)
+            this.keyword = ''
             this.getData()
           })
       }
@@ -67,19 +70,28 @@ export struct HomeView {
 
   build() {
     Column() {
-      Text('Days Matter')
+      Text($r('app.string.app_name'))
+        .fontSize(18)
         .height(60)
         .width('100%')
+        .fontWeight(500)
       Row({ space: 15 }) {
         Button('日期')
+          .backgroundColor($r('app.color.main_color'))
           .type(ButtonType.Normal)
           .borderRadius(8)
           .onClick(() => {
             this.showDatePicker()
           })
-        Search({ placeholder: '搜索 Days Matter 的文章' })
-          .searchButton('查找')
+        Search({ placeholder: '搜索 Today In History 的文章', value: this.keyword })
+          .searchButton('查找', {
+            fontColor: $r('app.color.main_color')
+          })
           .layoutWeight(1)
+          .onSubmit((value) => {
+            this.keyword = value
+            this.getData()
+          })
       }
       .height(56)
       .margin({ bottom: 4 })
@@ -87,10 +99,12 @@ export struct HomeView {
       List() {
         Repeat<DayEvent>(this.dayEventList)
           .each((item) => {
-            MyListItem({ title: item.item.title })
-              .onClick(() => {
-                this.pathStack?.pushPathByName('EventPage', item.item)
-              })
+            ListItem(){
+              MyListItem({ title: item.item.title })
+                .onClick(() => {
+                  this.pathStack?.pushPathByName('EventPage', item.item)
+                })
+            }
           })
       }
       .scrollBar(BarState.Off)
@@ -105,28 +119,5 @@ export struct HomeView {
     .padding({ left: 15, right: 15 })
     .width('100%')
     .height('100%')
-  }
-}
-
-
-@ComponentV2
-struct MyListItem {
-  @Param title: string = ''
-
-  build() {
-    ListItem() {
-      Row() {
-        Text(this.title)
-          .maxLines(1)
-          .textOverflow({ overflow: TextOverflow.Ellipsis })
-          .layoutWeight(1)
-        Image($r('sys.media.ohos_ic_public_arrow_right'))
-          .width(24)
-          .aspectRatio(1)
-          .fillColor('#999999')
-      }
-      .width('100%')
-      .height(60)
-    }
   }
 }

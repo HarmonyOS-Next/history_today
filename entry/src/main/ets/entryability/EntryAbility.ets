@@ -1,7 +1,7 @@
 import { AbilityConstant, UIAbility, Want } from '@kit.AbilityKit';
 import { hilog } from '@kit.PerformanceAnalysisKit';
 import { AppStorageV2, window } from '@kit.ArkUI';
-import { AppBreakPoint } from '../pages/models';
+import { AppBreakPoint } from '../models';
 
 const DOMAIN = 0x0000;
 

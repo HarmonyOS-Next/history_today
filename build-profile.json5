@@ -1,7 +1,19 @@
 {
   "app": {
     "signingConfigs": [
-
+      {
+        "name": "default",
+        "type": "HarmonyOS",
+        "material": {
+          "certpath": "/Users/zhousg/.ohos/config/default_history_today_03M7-BNfXZ8zV9PPpP3fhp1yNZl-7H203Y3NRDDAO0Y=.cer",
+          "keyAlias": "debugKey",
+          "keyPassword": "0000001B1330FF27B9A5F0D2C2FC049159D6C11E6160F839396A94DF633831DACE0FD9506915D3896406D7",
+          "profile": "/Users/zhousg/.ohos/config/default_history_today_03M7-BNfXZ8zV9PPpP3fhp1yNZl-7H203Y3NRDDAO0Y=.p7b",
+          "signAlg": "SHA256withECDSA",
+          "storeFile": "/Users/zhousg/.ohos/config/default_history_today_03M7-BNfXZ8zV9PPpP3fhp1yNZl-7H203Y3NRDDAO0Y=.p12",
+          "storePassword": "0000001BDB6D17E2A8F32D46909A99284EAC6A9CF18A63862B78BEE11C2F884FBF9AA841ADF2FD80DAB9C8"
+        }
+      }
     ],
     "products": [
       {

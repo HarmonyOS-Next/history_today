@@ -2,15 +2,15 @@
   "string": [
     {
       "name": "module_desc",
-      "value": "module description"
+      "value": "entry module"
     },
     {
       "name": "EntryAbility_desc",
-      "value": "description"
+      "value": "历史上的今天"
     },
     {
       "name": "EntryAbility_label",
-      "value": "label"
+      "value": "历史上的今天"
     }
   ]
 }

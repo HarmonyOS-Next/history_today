@@ -1,5 +1,6 @@
-import { DayEvent } from "./models"
-import { curves } from "@kit.ArkUI"
+import { DayEvent } from "../models"
+import { curves, promptAction } from "@kit.ArkUI"
+import { collectUtil } from "../utils/CollectUtil"
 
 @Builder
 export function EventPageBuilder() {
@@ -14,6 +15,8 @@ struct EventPage {
 
   @Local angle: number = 22.5
 
+  @Local isCollected: boolean = false
+
   build() {
     NavDestination() {
       Column(){
@@ -26,10 +29,22 @@ struct EventPage {
               .fontSize(20)
           }
           ListItem(){
-            Text(this.dayEvent.time)
-              .width('100%')
-              .textAlign(TextAlign.Center)
-              .fontColor('#999999')
+            Row({ space: 15 }){
+              Text(this.dayEvent.time)
+                .textAlign(TextAlign.Center)
+                .fontColor('#999999')
+              if (!this.isCollected) {
+                Text('收藏')
+                  .fontColor($r('app.color.main_color'))
+                  .onClick(() => {
+                    collectUtil.add(this.dayEvent)
+                    this.isCollected = true
+                    promptAction.showToast({ message: '收藏成功' })
+                  })
+              }
+            }
+            .justifyContent(FlexAlign.Center)
+            .width('100%')
           }
           ListItem(){
             Text(this.dayEvent.content)
@@ -63,6 +78,8 @@ struct EventPage {
       this.pathStack = context.pathStack
       const param = context.pathInfo.param as DayEvent
       this.dayEvent = param
+      const collectedList = collectUtil.all()
+      this.isCollected = collectedList.findIndex(item => item.id === this.dayEvent.id) > -1
     })
   }
 }
