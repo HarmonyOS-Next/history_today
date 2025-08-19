@@ -12,6 +12,9 @@
     "requestPermissions": [
       {
         "name": "ohos.permission.INTERNET"
+      },
+      {
+        "name": "ohos.permission.KEEP_BACKGROUND_RUNNING"
       }
     ],
     "deliveryWithInstall": true,
@@ -21,6 +24,9 @@
       {
         "name": "EntryAbility",
         "srcEntry": "./ets/entryability/EntryAbility.ets",
+        "backgroundModes": [
+          "audioPlayback"
+        ],
         "description": "$string:EntryAbility_desc",
         "icon": "$media:icon",
         "label": "$string:EntryAbility_label",

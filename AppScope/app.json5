@@ -1,7 +1,7 @@
 {
   "app": {
-    "bundleName": "com.atomicservice.6917570992964157570",
-    "bundleType": "atomicService",
+    "bundleName": "xyz.zhousg.history_today",
+    "bundleType": "app",
     "vendor": "zhousg",
     "versionCode": 1000000,
     "versionName": "1.0.0",

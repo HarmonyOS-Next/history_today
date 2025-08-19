@@ -25,7 +25,7 @@ struct WidgetCard {
     }) {
       Row() {
         Column() {
-          Image($r('app.media.icon'))
+          Image($r("app.media.icon"))
             .width('75%')
             .aspectRatio(1)
         }

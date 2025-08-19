@@ -1,5 +1,5 @@
 import { HomeView } from '../views/HomeView';
-import { MineView } from './MineView';
+import { MineView } from '../views/MineView';
 import { AppStorageV2, mediaquery } from '@kit.ArkUI';
 import { AppBreakPoint } from '../models';
 

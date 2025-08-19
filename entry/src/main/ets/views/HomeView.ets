@@ -1,7 +1,7 @@
 import { AppStorageV2, promptAction } from '@kit.ArkUI'
 import { MyListItem } from '../components/MyListItem'
-import { AppBreakPoint, DayEvent } from '../models'
-import { httpClient } from '../utils/HttpClient'
+import { AppBreakPoint, EventPageParams, HistoryEvent } from '../models'
+import { SearchUtil } from '../utils/SearchUtil'
 
 
 @ComponentV2
@@ -10,7 +10,7 @@ export struct HomeView {
   appBreakPoint: AppBreakPoint = AppStorageV2.connect(AppBreakPoint, () => new AppBreakPoint())!
   @Local selectedDate: Date = new Date()
   @Local keyword: string = ''
-  @Local dayEventList: DayEvent[] = []
+  @Local dayEventList: HistoryEvent[] = []
   customDialogId = 0
 
   async aboutToAppear(): Promise<void> {
@@ -22,11 +22,19 @@ export struct HomeView {
 
   async getData() {
     try {
-      const month = this.selectedDate.getMonth() + 1
-      const date = this.selectedDate.getDate()
-      const url = `events?month=${month}&date=${date}&title=${encodeURIComponent(this.keyword)}`
-      const data = await httpClient.request<DayEvent[]>({ url })
-      this.dayEventList = data
+      // const month = this.selectedDate.getMonth() + 1
+      // const date = this.selectedDate.getDate()
+      // const url = `events?month=${month}&date=${date}&title=${encodeURIComponent(this.keyword)}`
+      // const data = await httpClient.request<DayEvent[]>({ url })
+      const ctx = this.getUIContext().getHostContext()!
+      const result = await SearchUtil.getInstance(ctx).getData({
+        month: `${this.selectedDate.getMonth() + 1}`,
+        date: `${this.selectedDate.getDate()}`,
+        keyword: this.keyword
+      })
+      if (result) {
+        this.dayEventList = result.events
+      }
     } catch (e) {
       promptAction.showDialog({ message: e.message || '获取数据失败' })
     }
@@ -70,39 +78,37 @@ export struct HomeView {
 
   build() {
     Column() {
-      Text($r('app.string.app_name'))
-        .fontSize(18)
-        .height(60)
-        .width('100%')
-        .fontWeight(500)
       Row({ space: 15 }) {
-        Button('日期')
-          .backgroundColor($r('app.color.main_color'))
-          .type(ButtonType.Normal)
-          .borderRadius(8)
-          .onClick(() => {
-            this.showDatePicker()
-          })
-        Search({ placeholder: '搜索 Today In History 的文章', value: this.keyword })
+        Image($r('app.media.icon'))
+          .width(36)
+          .borderRadius(18)
+        Search({ placeholder: '请输入关键字~', value: this.keyword })
+          .placeholderFont({ size: 14 })
           .searchButton('查找', {
             fontColor: $r('app.color.main_color')
           })
+          .height(36)
           .layoutWeight(1)
           .onSubmit((value) => {
             this.keyword = value
             this.getData()
+          })
+        Image($r('sys.media.calendar_badge_play'))
+          .width(24)
+          .onClick(() => {
+            this.showDatePicker()
           })
       }
       .height(56)
       .margin({ bottom: 4 })
 
       List() {
-        Repeat<DayEvent>(this.dayEventList)
+        Repeat<HistoryEvent>(this.dayEventList)
           .each((item) => {
             ListItem(){
-              MyListItem({ title: item.item.title })
+              MyListItem({ title: item.item.title, content: item.item.content })
                 .onClick(() => {
-                  this.pathStack?.pushPathByName('EventPage', item.item)
+                  this.pathStack?.pushPathByName('EventPage', { item: item.item, list: this.dayEventList, isCollectPage: false } as EventPageParams)
                 })
             }
           })

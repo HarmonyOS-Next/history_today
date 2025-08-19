@@ -1,5 +1,5 @@
 import { preferences } from '@kit.ArkData';
-import { DayEvent } from '../models';
+import { HistoryEvent } from '../models';
 
 class CollectUtil {
 
@@ -13,19 +13,19 @@ class CollectUtil {
     return this.store
   }
 
-  add (item: DayEvent) {
+  add (item: HistoryEvent) {
     this.getStore().putSync(item.id.toString(), item)
     this.getStore().flushSync()
   }
 
-  del (item: DayEvent) {
+  del (item: HistoryEvent) {
     this.getStore().deleteSync(item.id.toString())
     this.getStore().flushSync()
   }
 
   all () {
     const data = this.getStore().getAllSync()
-    const values = Object.values(data) as DayEvent[]
+    const values = Object.values(data) as HistoryEvent[]
     return values
   }
 

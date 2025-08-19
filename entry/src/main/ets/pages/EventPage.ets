@@ -1,6 +1,8 @@
-import { DayEvent } from "../models"
+import { DayEvent, EventPageParams, HistoryEvent } from "../models"
 import { curves, promptAction } from "@kit.ArkUI"
 import { collectUtil } from "../utils/CollectUtil"
+import { ReadStateCode, TextReaderIcon } from "@hms.ai.textReader"
+import { EventTextReader } from "../components/EventTextReader"
 
 @Builder
 export function EventPageBuilder() {
@@ -11,43 +13,61 @@ export function EventPageBuilder() {
 struct EventPage {
   pathStack: NavPathStack = new NavPathStack()
 
-  @Local dayEvent: DayEvent = new DayEvent()
+  @Local dateEvent: HistoryEvent = {} as HistoryEvent
+  @Local dateEventList: HistoryEvent[] = []
 
   @Local angle: number = 22.5
 
   @Local isCollected: boolean = false
+
+  @Local readState: ReadStateCode = ReadStateCode.WAITING
+
+  @Local isCollectPage: boolean = false
+
+
 
   build() {
     NavDestination() {
       Column(){
         List({ space: 15 }){
           ListItem(){
-            Text(this.dayEvent.title)
-              .width('100%')
-              .textAlign(TextAlign.Center)
-              .fontWeight(500)
-              .fontSize(20)
-          }
-          ListItem(){
             Row({ space: 15 }){
-              Text(this.dayEvent.time)
-                .textAlign(TextAlign.Center)
-                .fontColor('#999999')
-              if (!this.isCollected) {
-                Text('收藏')
-                  .fontColor($r('app.color.main_color'))
-                  .onClick(() => {
-                    collectUtil.add(this.dayEvent)
-                    this.isCollected = true
-                    promptAction.showToast({ message: '收藏成功' })
-                  })
+              Column({ space: 15 }){
+                Text(this.dateEvent.title)
+                  .width('100%')
+                  .fontWeight(500)
+                  .fontSize(20)
+                Row({ space: 15 }){
+                  Text(this.dateEvent.year + '-' + this.dateEvent.month + '-' +this.dateEvent.date)
+                    .textAlign(TextAlign.Center)
+                    .fontColor('#999999')
+                  if (!this.isCollected) {
+                    Text('收藏')
+                      .fontColor($r('app.color.main_color'))
+                      .onClick(() => {
+                        collectUtil.add(this.dateEvent)
+                        this.isCollected = true
+                        promptAction.showToast({ message: '收藏成功' })
+                      })
+                  }
+                  if (this.isCollectPage && this.isCollected) {
+                    Text('取消收藏')
+                      .fontColor($r('app.color.main_color'))
+                      .onClick(() => {
+                        collectUtil.del(this.dateEvent)
+                        this.isCollected = false
+                        promptAction.showToast({ message: '取消收藏成功' })
+                      })
+                  }
+                }
+                .width('100%')
               }
+              .layoutWeight(1)
+              EventTextReader({ eventId: this.dateEvent.id?.toString(), list: this.dateEventList })
             }
-            .justifyContent(FlexAlign.Center)
-            .width('100%')
           }
           ListItem(){
-            Text(this.dayEvent.content)
+            Text(this.dateEvent.content)
               .fontColor('#333333')
               .lineHeight(24)
           }
@@ -76,10 +96,12 @@ struct EventPage {
     .title('')
     .onReady((context: NavDestinationContext) => {
       this.pathStack = context.pathStack
-      const param = context.pathInfo.param as DayEvent
-      this.dayEvent = param
+      const param = context.pathInfo.param as EventPageParams
+      this.dateEvent = param.item
+      this.dateEventList = param.list
+      this.isCollectPage = param.isCollectPage
       const collectedList = collectUtil.all()
-      this.isCollected = collectedList.findIndex(item => item.id === this.dayEvent.id) > -1
+      this.isCollected = collectedList.findIndex(item => item.id === this.dateEvent.id) > -1
     })
   }
 }

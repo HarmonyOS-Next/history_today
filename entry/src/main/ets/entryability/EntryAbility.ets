@@ -2,6 +2,7 @@ import { AbilityConstant, UIAbility, Want } from '@kit.AbilityKit';
 import { hilog } from '@kit.PerformanceAnalysisKit';
 import { AppStorageV2, window } from '@kit.ArkUI';
 import { AppBreakPoint } from '../models';
+import { WindowManager } from '@kit.SpeechKit';
 
 const DOMAIN = 0x0000;
 
@@ -44,6 +45,9 @@ export default class EntryAbility extends UIAbility {
         this.updateBreakpoint(windowSize.width)
       })
     });
+
+    // 朗读控件
+    WindowManager.setWindowStage(windowStage)
 
     windowStage.loadContent('pages/Index', (err) => {
       if (err.code) {

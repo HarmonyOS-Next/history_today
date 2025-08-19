@@ -7,11 +7,11 @@
         "material": {
           "certpath": "/Users/zhousg/.ohos/config/default_history_today_03M7-BNfXZ8zV9PPpP3fhp1yNZl-7H203Y3NRDDAO0Y=.cer",
           "keyAlias": "debugKey",
-          "keyPassword": "0000001B1330FF27B9A5F0D2C2FC049159D6C11E6160F839396A94DF633831DACE0FD9506915D3896406D7",
+          "keyPassword": "0000001BB33DF6B17A8A52DD2A364E96D743AF3F5AA18F357878AFEE1638008D467385525210C19C171AB2",
           "profile": "/Users/zhousg/.ohos/config/default_history_today_03M7-BNfXZ8zV9PPpP3fhp1yNZl-7H203Y3NRDDAO0Y=.p7b",
           "signAlg": "SHA256withECDSA",
           "storeFile": "/Users/zhousg/.ohos/config/default_history_today_03M7-BNfXZ8zV9PPpP3fhp1yNZl-7H203Y3NRDDAO0Y=.p12",
-          "storePassword": "0000001BDB6D17E2A8F32D46909A99284EAC6A9CF18A63862B78BEE11C2F884FBF9AA841ADF2FD80DAB9C8"
+          "storePassword": "0000001BDFBD4E573911B24028F73257F59CCB0AD96DBE5AA2474B4B8C5274390CCFAE8CEED98268DEEBD0"
         }
       }
     ],
@@ -19,14 +19,15 @@
       {
         "name": "default",
         "signingConfig": "default",
-        "compatibleSdkVersion": "5.0.3(15)",
+        "compatibleSdkVersion": "6.0.0(20)",
         "runtimeOS": "HarmonyOS",
         "buildOption": {
           "strictMode": {
             "caseSensitiveCheck": true,
             "useNormalizedOHMUrl": false
           }
-        }
+        },
+        "targetSdkVersion": "6.0.0(20)"
       }
     ],
     "buildModeSet": [

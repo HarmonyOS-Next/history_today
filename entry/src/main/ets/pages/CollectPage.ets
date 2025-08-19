@@ -1,5 +1,5 @@
 import { AppBreakPoint } from '../models'
-import { CollectView } from '../views/CollectView'
+import { CollectComp } from '../components/CollectComp'
 import { AppStorageV2 } from '@kit.ArkUI'
 
 @Builder
@@ -15,7 +15,7 @@ struct CollectPage {
 
   build() {
     NavDestination() {
-      CollectView()
+      CollectComp()
     }
     .title('')
     .hideBackButton(this.appBreakPoint.breakPoint === 'lg' ? true : false)
